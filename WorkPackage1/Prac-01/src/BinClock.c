@@ -106,6 +106,7 @@ int main(void){
 		{
 			digitalWrite(LED, LOW);
 			ledstatus = 0;
+		}
 		else{
 			digitalWrite(LED, HIGH);
 			ledstatus = 1;
