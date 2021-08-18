@@ -228,7 +228,7 @@ void minInc(void){
 			mins = 0;
 		}
 		else
-			minutes += 1;
+			mins += 1;
 		//Write minutes back to the RTC
 		wiringPiI2CWriteReg8(RTC, MIN_REGISTER, decCompensation(mins));
 	}
