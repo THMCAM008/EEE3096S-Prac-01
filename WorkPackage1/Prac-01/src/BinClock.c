@@ -69,8 +69,8 @@ void initGPIO(void){
 	}
 	
 	//Attach interrupts to Buttons
-	wiringPiISR0(BTNS[0], INT_EDGE_FALLING, &hourInc);
-	wiringPiISR0(BTNS[1], INT_EDGE_FALLING, &minInc);
+	wiringPiISR(BTNS[0], INT_EDGE_FALLING, &hourInc);
+	wiringPiISR(BTNS[1], INT_EDGE_FALLING, &minInc);
 	
 
 
@@ -96,9 +96,9 @@ int main(void){
 	// Repeat this until we shut down
 	for (;;){
 		//Fetch the time from the RTC
-		hours = wiringPiI2CRead8(RTC, HOUR_REGISTER);
-		mins = wiringPiI2CRead8(RTC, MIN_REGISTER);
-		secs = wiringPiI2CRead8(RTC, SEC_REGISTER);
+		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER);
+		mins = wiringPiI2CReadReg8(RTC, MIN_REGISTER);
+		secs = wiringPiI2CReadReg8(RTC, SEC_REGISTER);
 		
 		//Toggle Seconds LED
 		digitalWrite(LED, HIGH);
@@ -197,7 +197,7 @@ void hourInc(void){
 	if (interruptTime - lastInterruptTime>200){
 		printf("Interrupt 1 triggered, %x\n", hours);
 		//Fetch RTC Time
-		hours = hexCompensation(wiringPiI2CRead8(RTC, HOUR_REGISTER));
+		hours = hexCompensation(wiringPiI2CReadReg8(RTC, HOUR_REGISTER));
 		//Increase hours by 1, ensuring not to overflow
 		if (hours >= 24){
 			hours = 0;
@@ -205,7 +205,7 @@ void hourInc(void){
 		else
 			hours += 1;
 		//Write hours back to the RTC
-		wiringPiI2CWrite8(RTC, HOUR_REGISTER, decCompensation(hours));
+		wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, decCompensation(hours));
 	}
 	lastInterruptTime = interruptTime;
 }
@@ -222,15 +222,15 @@ void minInc(void){
 	if (interruptTime - lastInterruptTime>200){
 		printf("Interrupt 2 triggered, %x\n", mins);
 		//Fetch RTC Time
-		minutes = hexCompensation(wiringPiI2CRead8(RTC, MIN_REGISTER));
+		mins = hexCompensation(wiringPiI2CReadReg8(RTC, MIN_REGISTER));
 		//Increase minutes by 1, ensuring not to overflow
-		if (minutes >= 60){
-			minutes = 0;
+		if (mins >= 60){
+			mins = 0;
 		}
 		else
 			minutes += 1;
 		//Write minutes back to the RTC
-		wiringPiI2CWrite8(RTC, MIN_REGISTER, decCompensation(mins));
+		wiringPiI2CWriteReg8(RTC, MIN_REGISTER, decCompensation(mins));
 	}
 	lastInterruptTime = interruptTime;
 }
