@@ -105,10 +105,10 @@ int main(void){
 		if (ledstatus == 1)
 		{
 			digitalWrite(LED, LOW);
-			ledstatus = 0
+			ledstatus = 0;
 		else{
 			digitalWrite(LED, HIGH);
-			ledstatus = 1
+			ledstatus = 1;
 		}
 		
 		// Print out the time we have stored on our RTC
