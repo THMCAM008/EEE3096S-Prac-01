@@ -22,6 +22,7 @@
 int hours, mins, secs;
 long lastInterruptTime = 0; //Used for button debounce
 int RTC; //Holds the RTC instance
+int ledstatus;
 
 int HH,MM,SS;
 
@@ -101,10 +102,14 @@ int main(void){
 		secs = wiringPiI2CReadReg8(RTC, SEC_REGISTER);
 		
 		//Toggle Seconds LED
-		digitalWrite(LED, HIGH);
-		delay(1000); //milliseconds
-		digitalWrite(LED, LOW);
-		delay(1000); //milliseconds
+		if (ledstatus == 1)
+		{
+			digitalWrite(LED, LOW);
+			ledstatus = 0
+		else{
+			digitalWrite(LED, HIGH);
+			ledstatus = 1
+		}
 		
 		// Print out the time we have stored on our RTC
 		printf("The current time is: %d:%d:%x\n", hours, mins, secs);
@@ -197,7 +202,7 @@ void hourInc(void){
 	if (interruptTime - lastInterruptTime>200){
 		printf("Interrupt 1 triggered, %x\n", hours);
 		//Fetch RTC Time
-		hours = hexCompensation(wiringPiI2CReadReg8(RTC, HOUR_REGISTER));
+		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER);
 		//Increase hours by 1, ensuring not to overflow
 		if (hours >= 24){
 			hours = 0;
@@ -205,7 +210,7 @@ void hourInc(void){
 		else
 			hours += 1;
 		//Write hours back to the RTC
-		wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, decCompensation(hours));
+		wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hours);
 	}
 	lastInterruptTime = interruptTime;
 }
@@ -222,7 +227,7 @@ void minInc(void){
 	if (interruptTime - lastInterruptTime>200){
 		printf("Interrupt 2 triggered, %x\n", mins);
 		//Fetch RTC Time
-		mins = hexCompensation(wiringPiI2CReadReg8(RTC, MIN_REGISTER));
+		mins = wiringPiI2CReadReg8(RTC, MIN_REGISTER);
 		//Increase minutes by 1, ensuring not to overflow
 		if (mins >= 60){
 			mins = 0;
@@ -230,7 +235,7 @@ void minInc(void){
 		else
 			mins += 1;
 		//Write minutes back to the RTC
-		wiringPiI2CWriteReg8(RTC, MIN_REGISTER, decCompensation(mins));
+		wiringPiI2CWriteReg8(RTC, MIN_REGISTER, mins);
 	}
 	lastInterruptTime = interruptTime;
 }
