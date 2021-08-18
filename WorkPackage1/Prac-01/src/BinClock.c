@@ -205,7 +205,7 @@ void hourInc(void){
 		//Fetch RTC Time
 		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER);
 		//Increase hours by 1, ensuring not to overflow
-		if (hours >= 24){
+		if (hours == 23){
 			hours = 0;
 		}
 		else
