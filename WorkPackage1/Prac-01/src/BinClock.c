@@ -230,7 +230,7 @@ void minInc(void){
 		//Fetch RTC Time
 		mins = wiringPiI2CReadReg8(RTC, MIN_REGISTER);
 		//Increase minutes by 1, ensuring not to overflow
-		if (mins >= 60){
+		if (mins == 59){
 			mins = 0;
 		}
 		else
