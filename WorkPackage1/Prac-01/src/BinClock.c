@@ -5,8 +5,8 @@
  * Further Modified By: Mark Njoroge 
  *
  * 
- * <STUDNUM_1> <STUDNUM_2>
- * Date
+ * THMCAM008 CHKTIN017
+ * 18 August 2021
 */
 
 #include <signal.h> //for catching signals
